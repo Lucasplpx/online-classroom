@@ -5,13 +5,12 @@ interface ErrorResponseType {
   error: string;
 }
 
-
 export default async (
   req: NextApiRequest,
-  res: NextApiResponse<ErrorResponseType | object[]>
+  res: NextApiResponse<ErrorResponseType | Record<string, unknown>[]>
 ): Promise<void> => {
   if (req.method === 'GET') {
-    const { courses } = req.body;
+    const { courses }: { courses: string } = req.body;
 
     if (!courses) {
       return res
@@ -23,7 +22,8 @@ export default async (
 
     const response = await db
       .collection('users')
-      .find({ courses }).toArray();
+      .find({ courses: { $in: [new RegExp(`^${courses}`, 'i')] } })
+      .toArray();
 
     if (response.length === 0) {
       return res.status(400).json({ error: 'Course not found' });
