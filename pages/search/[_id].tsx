@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import NavBar from '../../components/nav';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 interface Teacher {
@@ -22,6 +24,7 @@ export default function teacherProfilePage({
 }: Teacher): JSX.Element {
   return (
     <>
+      <NavBar />
       <h1 className="text-3xl">Página do professor {name}</h1>
       <h1 className="text-2xl">E-mail: {email}</h1>
       <h1 className="text-2xl">ID: {_id}</h1>
